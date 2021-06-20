@@ -1,0 +1,4 @@
+git-local() {
+git add . -v
+git commit -m "${2}"
+}

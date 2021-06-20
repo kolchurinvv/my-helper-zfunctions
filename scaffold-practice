@@ -1,0 +1,104 @@
+print_usage(){
+  echo "Usage:  scaffold-practice [-flags] <dirName> <functionName> <variables>\n" 2>&1
+  echo '  <dirName> - required, specify the name of a new directory to be created (name of the problem) inside ~/Dev_Projects/Toptal\ test\ prep/'
+  echo '  <functionName> - required, specify the name of the function'
+  echo '  <variables> - required, comma separated, no whte spaces characters used in the problem for input variables'
+  echo '\n [-flags]:'
+  echo '   -h   prints out this message'
+  echo '   -n   prevents Nodemon from launhing automatically'
+}
+
+while getopts ':hn' flag; do
+  case "${flag}" in
+    h)
+      print_usage
+      return 0;;
+    n)
+      isFlagged='true'
+      useNodemon='false';;
+    # :)
+    #   echo "$0:Must supply <dirName> <functionName> <variables>\n" >&2
+    #   print_usage
+    #   return 1;;
+    ?)
+      printf "Invalid option: -${OPTARG}.\n\n" >&2
+      print_usage
+      return 1;;
+  esac
+done
+
+if [[ $isFlagged == 'true' ]]; then
+  shift
+fi
+
+dirName=${1}
+functionName=${2}
+variables=${3}
+
+if [[ ${#} -lt 3 ]]; then
+  echo 'Must specify <dirName>, <functionName> and <variables>\n\n'
+  print_usage
+  return 1
+fi
+
+isUniqueName(){
+  DIRECTORYEXISTS=$(basename $(find ~/Dev_Projects/Toptal_test_prep -type d  -name ${dirName})) >/dev/null 2>&1
+  if [[ $DIRECTORYEXISTS = '' ]];
+    then
+      return 0
+    else
+      return 1
+  fi
+}
+
+while true; do
+  isUniqueName
+  if [[ ${?} -ne 0 ]]; then
+    echo "Folder '${dirName}' already exists. Folder names must be unique."
+    dirName= 
+    read  dirName'?Please enter new folder name: '
+    isUniqueName
+    if [[ ${?} -eq 0 ]]; then
+      break
+    fi
+  else
+    break
+  fi
+done
+
+mkdir ~/Dev_Projects/Toptal_test_prep/"$dirName"
+cd ~/Dev_Projects/Toptal_test_prep/"$dirName"
+touch input.txt
+echo '{
+  "main": "index.js",
+  "type": "module",
+  "dependencies": {
+    "fs": "0.0.1-security"
+  }
+}' >> package.json
+echo 'import { readFileSync } from "fs";
+
+let input = readFileSync("input.txt", "utf8", (err, data) => {
+  if (!!err) {
+    console.error(err);
+  }
+  return data;
+}).toString()
+  .split("\\n")
+  .map((line) => line.split(" "));
+
+let ['$variables'] = input;
+
+function '$functionName'('$variables') {
+  
+}
+
+console.log('$functionName'('$variables'));
+' >> index.js
+npm install
+code -g index.js:15:3 .
+if [[ $useNodemon == 'false' ]]; then
+  return 0
+fi
+npx nodemon -e "js, txt" -w
+return 0

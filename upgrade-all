@@ -1,0 +1,15 @@
+upgrade-all(){
+  echo "\n ## Homebrew is brewing... ## \n"
+  brew upgrade
+  brew upgrade --cask --greedy
+  echo "\n ## Anaconda is slithering... ## \n\n _/\__/\__0> \n\n"
+  conda update --prefix /Users/vladimir/anaconda3 anaconda
+  conda update --all
+  echo "\n\n ## NPM stands for NEVER PANIC MUCH... ## \n\n"
+  nvm install --lts
+  nvm alias default node
+  npm install -g npm
+  npm update -g
+  omz update
+  npm config delete prefix
+}
