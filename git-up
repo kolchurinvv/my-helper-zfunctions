@@ -27,7 +27,8 @@ while getopts ':hps' flag; do
     p)
       isFlagged='true'
       useLastCommit='true'
-      getLastCommitMessage;;
+      getLastCommitMessage
+      remoteBranchName=${2};;
     s)
       isFlagged='true'
       sameBranch='true'
@@ -77,10 +78,9 @@ git add . -v
 if [ $useLastCommit == 'false' ]; then
   git commit -m "$message"
 fi
-if [ $sameBranch == 'true' ];
+if [[ $sameBranch == 'true' ]];
   then
     git push origin $remoteBranchName:$remoteBranchName
   else
     git push origin `git branch | awk '{print $2}'`:"$remoteBranchName"
 fi
-# some test changes
