@@ -21,7 +21,7 @@ done
 if [[ $isFlagged == 'true' ]]; then
   shift
 fi
-echo ${#}
+
 if [[ ${#} -lt 1 ]]; then
   echo 'Must have commit message\n\n'
   print_usage
