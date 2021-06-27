@@ -1,0 +1,35 @@
+print_usage(){
+  echo 'Usage:  git-lc [-flags] "commit message"\n' 2>&1
+  echo '  git-lc - add all files and commit locally with a meassage\n'
+  echo '  "commit message" - required, the message assigned to the commit'
+  echo '\n [-flags]:'
+  echo '   -h   prints out this message'
+}
+
+while getopts ':h' flag; do
+  case "${flag}" in
+    h)
+      print_usage
+      return 0;;
+    # :)
+    #   print_usage
+    #   return 1;;
+    ?)
+      printf "Invalid option: -${OPTARG}.\n\n" >&2
+      print_usage
+      return 1;;
+  esac
+done
+
+if [[ $isFlagged == 'true' ]]; then
+  shift
+fi
+
+if [[ ${#} -lt 1 ]]; then
+  echo 'Must have commit message\n\n'
+  print_usage
+  return 1
+fi
+
+git add . -v
+git commit -m "${1}"
