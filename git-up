@@ -78,7 +78,7 @@ git add . -v
 if [ $useLastCommit == 'false' ]; then
   git commit -m "$message"
 fi
-if [ $sameBranch == 'true' ];
+if [[ $sameBranch == 'true' ]];
   then
     git push origin $remoteBranchName:$remoteBranchName
   else
