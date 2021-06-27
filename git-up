@@ -83,3 +83,4 @@ if [ $sameBranch == 'true' ];
   else
     git push origin `git branch | awk '{print $2}'`:"$remoteBranchName"
 fi
+# some test changes
