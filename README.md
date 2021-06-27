@@ -26,7 +26,7 @@ In addition to the commands enclosed in **git-lc** also has the ability to push 
 
 By default, it takes 2 arguments `[remote-branch-name] "commit message"` adds all files, creates a new commit with the specified message, if there are new changes on the current local branch, and pushes them to the provided branch. If the specified branch doesn't exist on the remote - the script creates one.
 
-Usage: `$ git-up [-flags] <remote-branch-name> "commit message"` \n
+Usage: `$ git-up [-flags] <remote-branch-name> "commit message"` <br />
 git-up - add all files, commit with a meassage and push the current branch to a <remote-branch-name>
 "commit message" - message assigned to the commit
 [-flags]:
