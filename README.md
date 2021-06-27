@@ -33,4 +33,4 @@ Usage: `$ git-up [-flags] <remote-branch-name> "commit message"` <br />
 [-flags]:<br />
   -h    prints out this message<br />
   -p    Previous. Uses the last commit; `"commit message"` argument is skipped<br />
-  -s    Same (branches). Pushes changes to the branch with the same name as the current one. <remote-branch-name> ignored
+  -s    Same (branches). Pushes changes to the branch with the same name as the current one. `<remote-branch-name>` ignored
