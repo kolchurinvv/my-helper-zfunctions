@@ -74,10 +74,12 @@ fi
 echo $remoteBranchName $message
 
 git add . -v
-git commit -m "$message"
-# if [ $sameBranch == 'true' ];
-#   then
-#     git push origin $remoteBranchName:$remoteBranchName
-#   else
-#     git push origin `git branch | awk '{print $2}'`:"$remoteBranchName"
-# fi
+if [ $useLastCommit == 'false' ]; then
+  git commit -m "$message"
+fi
+if [ $sameBranch == 'true' ];
+  then
+    git push origin $remoteBranchName:$remoteBranchName
+  else
+    git push origin `git branch | awk '{print $2}'`:"$remoteBranchName"
+fi
