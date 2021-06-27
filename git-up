@@ -11,9 +11,7 @@ print_usage(){
 identicalBranchNames(){
   remoteBranchName=$(git branch | awk '{print $2}')
 }
-getLastCommitMessage(){
-   message=$(git log -1 --pretty=%B) >&1
-}
+
 message=
 remoteBranchName=
 isFlagged='false'
@@ -27,16 +25,14 @@ while getopts ':hps' flag; do
     p)
       isFlagged='true'
       useLastCommit='true'
-      getLastCommitMessage
       remoteBranchName=${2};;
     s)
       isFlagged='true'
       sameBranch='true'
       identicalBranchNames
       message=${2}
-      if [[ ${@} =~ 'p' ]];then
+      if [[ ${1} =~ 'p' ]];then
         useLastCommit='true'
-        getLastCommitMessage
       fi
       if [ ${#} -lt 2 -a $useLastCommit == 'false' ];
         then
@@ -72,7 +68,7 @@ if [ $isFlagged == 'false' -a ${#} -eq 2 ]; then
   message=${2}
 fi
 
-echo $remoteBranchName $message
+echo $remoteBranchName $message $useLastCommit
 
 git add . -v
 if [ $useLastCommit == 'false' ]; then
