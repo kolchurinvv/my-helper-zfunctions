@@ -31,6 +31,6 @@ Usage: `$ git-up [-flags] <remote-branch-name> "commit message"` <br />
 `git-up` - add all files, commit with a meassage and push the current branch to a `<remote-branch-name>`<br />
 `"commit message"` - message assigned to the commit<br /><br />
 [-flags]:<br />
--h prints out this message<br />
--p Previous. Uses the last commit; "commit message" argument is skipped<br />
--s Same (branches). Pushes changes to the branch with the same name as the current one. <remote-branch-name> ignored
+  -h    prints out this message<br />
+  -p    Previous. Uses the last commit; `"commit message"` argument is skipped<br />
+  -s    Same (branches). Pushes changes to the branch with the same name as the current one. <remote-branch-name> ignored
