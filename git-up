@@ -6,6 +6,7 @@ print_usage(){
   echo '    -h    prints out this message'
   echo '    -p    Previous. Uses the last commit; "commit message" argument is skipped'
   echo '    -s    Same (branches). Pushes changes to the branch with the same name as the current one. <remote-branch-name> ignored'
+  echo '    -d    Debugging mode ON'
 }
 
 identicalBranchNames(){
@@ -16,8 +17,9 @@ message=
 remoteBranchName=
 isFlagged='false'
 useLastCommit='false'
+debugginMode='OFF'
 
-while getopts ':hps' flag; do
+while getopts ':hpsd' flag; do
   case "${flag}" in
     h)
       print_usage
@@ -40,6 +42,9 @@ while getopts ':hps' flag; do
           message=
           return 1
       fi;;
+    d)
+      isFlagged='true'
+      debugginMode='ON'
     *)
       printf "Invalid option: -${OPTARG}.\n\n" >&2
       print_usage
@@ -68,7 +73,12 @@ if [ $isFlagged == 'false' -a ${#} -eq 2 ]; then
   message=${2}
 fi
 
-echo $remoteBranchName $message $useLastCommit
+if [[ $debugginMode == 'ON' ]]; then
+  echo '\n\n######################### Debugging mode ON #########################\n\n'
+  echo 'showing:\n$remoteBranchname; $message; $useLastCommit; $isFlagged'
+  echo $remoteBranchName $message $useLastCommit $isFlagged
+  echo '######################### end of debugging messages #########################\n\n'
+fi
 
 git add . -v
 if [ $useLastCommit == 'false' ]; then
