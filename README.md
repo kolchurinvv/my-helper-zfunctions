@@ -26,7 +26,7 @@ Runs `git add . -v` and `git commit -m ${message}`. It now has the `-h` flag to 
 ### Usage:
 `git-lc [-flags] "commit message"`<br />
 git-lc - add all files and commit locally with a meassage<br />
-"commit message" - required, the message assigned to the commit<br />
+"commit message" - required, the message assigned to the commit<br /><br />
 [-flags]:<br />
 -h    prints out this message
 
