@@ -12,13 +12,13 @@ _It took me forever to actually write it with almost all bells and whistles of a
 
 ### git-lc
 
-Runs `git add . -v` and 'git commit -m ${message}`. It now has the `-h` flag to show usage and tests for existance of the message.
+Runs `git add . -v` and `git commit -m ${message}`. It now has the `-h` flag to show usage and tests for existance of the message. <br />
 
-Usage: git-lc [-flags] "commit message"
-git-lc - add all files and commit locally with a meassage
-"commit message" - required, the message assigned to the commit
-[-flags]:
--h prints out this message
+Usage: `git-lc [-flags] "commit message"`<br />
+git-lc - add all files and commit locally with a meassage<br />
+"commit message" - required, the message assigned to the commit<br />
+[-flags]:<br />
+-h    prints out this message
 
 ### git-up
 
