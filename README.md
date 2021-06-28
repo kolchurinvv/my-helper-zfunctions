@@ -8,15 +8,16 @@ This one is a quick way to setup the file system in a specified inside the scrip
 _It took me forever to actually write it with almost all bells and whistles of an actual shell script. always wanted to learn how to create scripts that handle flags as well as arguments. Well, vio la!_
 
 **If you are using zsh or other shells that `source` / `.` the custom scrits, make sure to mention that in your research of the builtin commands you'd like to use!!!**
-`read` builtin, for instanse, requires a coprocess if `source`d or a completely different syntax for displaying a prompt to the user in the terminal and saving to a variable.
+`read` builtin, for instanse, requires a coprocess if `source`d or a completely different syntax for displaying a prompt to the user in the terminal and saving to a variable.<br /><br />
 
-echo "Usage:  scaffold-practice [-flags] <dirName> <functionName> <variables>\n" 2>&1
-  echo '  <dirName> - required, specify the name of a new directory to be created (name of the problem) inside ~/Dev_Projects/Toptal\ test\ prep/'
-  echo '  <functionName> - required, specify the name of the function'
-  echo '  <variables> - required, comma separated, no whte spaces characters used in the problem for input variables'
-  echo '\n [-flags]:'
-  echo '   -h   prints out this message'
-  echo '   -n   prevents Nodemon from launhing automatically'
+### Usage:
+`scaffold-practice [-flags] <dirName> <functionName> <variables>`<br />
+`<dirName>` - required, specify the name of a new directory to be created (name of the problem) inside `~/Dev_Projects/Toptal_test_prep`<br />
+`<functionName>` - required, specify the name of the function <br />
+`<variables>` - required, comma separated, no whte spaces characters used in the problem for input variables <br /><br />
+[-flags]:<br />
+-h   prints out this message<br />
+-n   prevents Nodemon from launhing automatically<br />
 
 ## git-lc
 

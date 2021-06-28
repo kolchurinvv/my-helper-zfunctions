@@ -44,7 +44,7 @@ while getopts ':hpsd' flag; do
       fi;;
     d)
       isFlagged='true'
-      debugginMode='ON'
+      debugginMode='ON';;
     *)
       printf "Invalid option: -${OPTARG}.\n\n" >&2
       print_usage

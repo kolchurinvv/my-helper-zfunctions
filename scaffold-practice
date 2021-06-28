@@ -1,6 +1,6 @@
 print_usage(){
   echo "Usage:  scaffold-practice [-flags] <dirName> <functionName> <variables>\n" 2>&1
-  echo '  <dirName> - required, specify the name of a new directory to be created (name of the problem) inside ~/Dev_Projects/Toptal\ test\ prep/'
+  echo '  <dirName> - required, specify the name of a new directory to be created (name of the problem) inside ~/Dev_Projects/Toptal_test_prep'
   echo '  <functionName> - required, specify the name of the function'
   echo '  <variables> - required, comma separated, no whte spaces characters used in the problem for input variables'
   echo '\n [-flags]:'
