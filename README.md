@@ -11,7 +11,7 @@ _It took me forever to actually write it with almost all bells and whistles of a
 `read` builtin, for instanse, requires a coprocess if `source`d or a completely different syntax for displaying a prompt to the user in the terminal and saving to a variable.<br /><br />
 
 ### Usage:
-`scaffold-practice [-flags] <dirName> <functionName> <variables>`<br />
+`$ scaffold-practice [-flags] <dirName> <functionName> <variables>`<br />
 `<dirName>` - required, specify the name of a new directory to be created (name of the problem) inside `~/Dev_Projects/Toptal_test_prep`<br />
 `<functionName>` - required, specify the name of the function <br />
 `<variables>` - required, comma separated, no whte spaces characters used in the problem for input variables <br /><br />
@@ -24,7 +24,7 @@ _It took me forever to actually write it with almost all bells and whistles of a
 Runs `git add . -v` and `git commit -m ${message}`. It now has the `-h` flag to show usage and tests for existance of the message. <br />
 
 ### Usage:
-`git-lc [-flags] "commit message"`<br />
+`$ git-lc [-flags] "commit message"`<br />
 git-lc - add all files and commit locally with a meassage<br />
 "commit message" - required, the message assigned to the commit<br /><br />
 [-flags]:<br />
