@@ -8,7 +8,7 @@ upgrade-all(){
   echo "\n\n ## NPM stands for NEVER PANIC MUCH... ## \n\n"
   nvm install --lts
   nvm alias default node
-  npm install -g npm
+  npm install npm@latest -g
   npm update -g
   omz update
   npm config delete prefix
