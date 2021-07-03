@@ -66,8 +66,8 @@ while true; do
   fi
 done
 
-mkdir ~/Dev_Projects/Toptal_test_prep/"$dirName"
-cd ~/Dev_Projects/Toptal_test_prep/"$dirName"
+mkdir ~/Dev_Projects/coding_practice/"$dirName"
+cd ~/Dev_Projects/coding_practice/"$dirName"
 touch input.txt
 echo '{
   "main": "index.js",
