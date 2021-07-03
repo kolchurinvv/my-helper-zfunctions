@@ -71,10 +71,7 @@ cd ~/Dev_Projects/coding_practice/"$dirName"
 touch input.txt
 echo '{
   "main": "index.js",
-  "type": "module",
-  "dependencies": {
-    "fs": "0.0.1-security"
-  }
+  "type": "module"
 }' >> package.json
 echo 'import { readFileSync } from "fs";
 
