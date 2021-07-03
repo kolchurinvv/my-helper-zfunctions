@@ -6,6 +6,8 @@ upgrade-all(){
   conda update --prefix /Users/vladimir/anaconda3 anaconda
   conda update --all
   echo "\n\n ## NPM stands for NEVER PANIC MUCH... ## \n\n"
+
+  # TODO #3 Figure out how to keep the globally installed packages if the node version updates
   nvm install --lts
   nvm alias default node
   npm install npm@latest -g
