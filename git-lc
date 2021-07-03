@@ -5,6 +5,7 @@ print_usage(){
   echo '\n [-flags]:'
   echo '   -h   prints out this message'
 }
+# TODO #6 add the ability to just `git commit`, aka for the editor to open a commit dialog instad of using the `-m` flag
 
 while getopts ':h' flag; do
   case "${flag}" in
