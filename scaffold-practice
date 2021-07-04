@@ -68,7 +68,9 @@ done
 
 mkdir ~/Dev_Projects/coding_practice/"$dirName"
 cd ~/Dev_Projects/coding_practice/"$dirName"
-touch input.txt
+echo 'line one
+line two
+line3 with more elements' >> input.txt
 echo '{
   "main": "index.js",
   "type": "module"
@@ -81,16 +83,18 @@ let input = readFileSync("input.txt", "utf8", (err, data) => {
   }
   return data;
 }).toString()
-  .split("\\n")
-  .map((line) => line.split(" "));
+  .replace(/\B\s+/gm, "")           // replace preceding empty spaces and lines with ""
+  .split("\\n")                     // split into `line` arrays
+  .map((line) => line.split(" "));  // on each `line` split based on spaces
 
 let ['$variables'] = input;
 
 function '$functionName'('$variables') {
-  
+  return {'$variables'}
 }
-
+console.time("'$functionName'");
 console.log('$functionName'('$variables'));
+console.timeEnd("'$functionName'");
 ' >> index.js
 npm install
 code -g index.js:15:3 .
