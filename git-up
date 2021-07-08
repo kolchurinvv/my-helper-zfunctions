@@ -76,10 +76,10 @@ fi
 if [[ $debugginMode == 'ON' ]]; then
   echo '\n\n######################### Debugging mode ON #########################\n\n'
   echo ''
-  echo `remote branch:${remoteBranchName}` 
-  echo `message:${message}`
-  echo `use last commit: ${useLastCommit}`
-  echo `is flagged: ${isFlagged}`
+  echo "remote branch:${remoteBranchName}"
+  echo "message:${message}"
+  echo "use last commit: ${useLastCommit}"
+  echo "is flagged: ${isFlagged}"
   echo ''
   echo '######################### end of debugging messages #########################\n\n'
 fi
