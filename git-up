@@ -75,13 +75,11 @@ fi
 
 if [[ $debugginMode == 'ON' ]]; then
   echo '\n\n######################### Debugging mode ON #########################\n\n'
-  echo ''
-  echo "remote branch:${remoteBranchName}"
-  echo "message:${message}"
+  echo "remote branch: ${remoteBranchName}"
+  echo "message: ${message}"
   echo "use last commit: ${useLastCommit}"
   echo "is flagged: ${isFlagged}"
-  echo ''
-  echo '######################### end of debugging messages #########################\n\n'
+  echo '\n\n######################### end of debugging messages #########################\n\n'
 fi
 
 git add . -v
@@ -90,7 +88,9 @@ if [ $useLastCommit == 'false' ]; then
 fi
 if [[ $sameBranch == 'true' ]];
   then
-    git push origin $remoteBranchName:$remoteBranchName
+    echo "same ${sameBranch}"
+    git push origin $remoteBranchName: $remoteBranchName
   else
+    echo "different branches ${remoteBranchName}"
     git push origin `git branch | awk '{print $2}'`:"$remoteBranchName"
 fi
