@@ -27,7 +27,7 @@ while getopts ':hpsd' flag; do
     s)
       isFlagged='true'
       sameBranch='true'
-      remoteBranchName=$(git branch | awk '{print $2}')
+      remoteBranchName=$(git branch | awk '$0 ~ /\*/ { print $2}')"
       message=${2}
       if [[ ${1} =~ 'p' ]];then
         useLastCommit='true'
@@ -71,7 +71,7 @@ fi
 
 if [[ $debugginMode == 'ON' ]]; then
   echo '\n\n######################### Debugging mode ON #########################\n\n'
-  echo "remote branch: $(git branch | awk '$0 ~ /\*/ { print $2}')"
+  echo "local branch name with -s flag: $(git branch | awk '$0 ~ /\*/ { print $2}')"
   echo "message: ${message}"
   echo "use last commit: ${useLastCommit}"
   echo "is flagged: ${isFlagged}"
@@ -84,9 +84,7 @@ if [ $useLastCommit == 'false' ]; then
 fi
 if [[ $sameBranch == 'true' ]];
   then
-    echo "same branch is ${sameBranch}; ${remoteBranchName}"
-    # git push origin $remoteBranchName:$remoteBranchName
+    git push origin $remoteBranchName:$remoteBranchName
   else
-    echo "different branches ${remoteBranchName}"
     git push origin `git branch | awk '{print $2}'`:"$remoteBranchName"
 fi
