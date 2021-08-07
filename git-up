@@ -71,7 +71,7 @@ fi
 
 if [[ $debugginMode == 'ON' ]]; then
   echo '\n\n######################### Debugging mode ON #########################\n\n'
-  echo "remote branch: ${remoteBranchName}"
+  echo "remote branch: $(git branch | awk '{print $2}'); ${remoteBranchName}"
   echo "message: ${message}"
   echo "use last commit: ${useLastCommit}"
   echo "is flagged: ${isFlagged}"
@@ -85,7 +85,7 @@ fi
 if [[ $sameBranch == 'true' ]];
   then
     echo "same branch is ${sameBranch}; ${remoteBranchName}"
-    git push origin $remoteBranchName: $remoteBranchName
+    git push origin $remoteBranchName:$remoteBranchName
   else
     echo "different branches ${remoteBranchName}"
     git push origin `git branch | awk '{print $2}'`:"$remoteBranchName"
