@@ -88,7 +88,7 @@ if [ $useLastCommit == 'false' ]; then
 fi
 if [[ $sameBranch == 'true' ]];
   then
-    echo "same ${sameBranch}"
+    echo "same branch is ${sameBranch}; ${remoteBranchName}"
     git push origin $remoteBranchName: $remoteBranchName
   else
     echo "different branches ${remoteBranchName}"
