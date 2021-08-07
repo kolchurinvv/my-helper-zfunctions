@@ -12,6 +12,7 @@ upgrade-all(){
     if [ "$current_node_version" != "$next_node_version" ]; then
       local -r previous_node_version=$current_node_version
       nvm install --lts
+      npm install npm@latest -g
       nvm reinstall-packages "$previous_node_version"
       nvm uninstall "$previous_node_version"
       nvm cache clear
