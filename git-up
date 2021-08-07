@@ -9,10 +9,6 @@ print_usage(){
   echo '    -d    Debugging mode ON'
 }
 
-identicalBranchNames(){
-  remoteBranchName=$(git branch | awk '{print $2}')
-}
-
 message=
 remoteBranchName=
 isFlagged='false'
@@ -31,7 +27,7 @@ while getopts ':hpsd' flag; do
     s)
       isFlagged='true'
       sameBranch='true'
-      identicalBranchNames
+      remoteBranchName=$(git branch | awk '{print $2}')
       message=${2}
       if [[ ${1} =~ 'p' ]];then
         useLastCommit='true'
@@ -75,7 +71,6 @@ fi
 
 if [[ $debugginMode == 'ON' ]]; then
   echo '\n\n######################### Debugging mode ON #########################\n\n'
-  echo $(git branch | awk '{print $2}')
   echo "remote branch: ${remoteBranchName}"
   echo "message: ${message}"
   echo "use last commit: ${useLastCommit}"
