@@ -71,7 +71,7 @@ fi
 
 if [[ $debugginMode == 'ON' ]]; then
   echo '\n\n######################### Debugging mode ON #########################\n\n'
-  echo "remote branch: $(git branch | awk $2 '{gsub(/\* /,"")}')"
+  echo "remote branch: $(git branch | awk '$0 ~ /\*/ { print $1}')"
   echo "message: ${message}"
   echo "use last commit: ${useLastCommit}"
   echo "is flagged: ${isFlagged}"
