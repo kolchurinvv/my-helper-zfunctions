@@ -84,7 +84,12 @@ if [ $useLastCommit == 'false' ]; then
 fi
 if [[ $sameBranch == 'true' ]];
   then
-    git push origin $remoteBranchName:$remoteBranchName
+    if [[ $debugginMode == 'ON' ]]; then
+      echo "WARNING: Debugging mode disabpled 'git push' command"
+      return
+    else 
+      git push origin $remoteBranchName:$remoteBranchName
+    fi
   else
     git push origin `git branch | awk '{print $2}'`:$remoteBranchName
 fi
