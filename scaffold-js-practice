@@ -97,10 +97,10 @@ console.log('$functionName'('$variables'));
 console.timeEnd("'$functionName'");
 ' >> index.js
 npm install
-code -g index.js:15:3 .
+code -g index.js:16:3 .
 if [[ $useNodemon == 'false' ]]; then
   return 0
 fi
 # TODO: #2 find a way to push this into the integrated terminal in VScode
-npx nodemon -e "js, txt" -w
+nodemon -e "js, txt" -w
 return 0
