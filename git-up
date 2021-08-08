@@ -71,25 +71,23 @@ fi
 
 if [[ $debugginMode == 'ON' ]]; then
   echo '\n\n######################### Debugging mode ON #########################\n\n'
+  echo "WARNING: Debugging mode disabpled 'git push' command\n"
   echo "local active branch name parsed as: $(git branch | awk '$0 ~ /\*/ { print $2}')"
   echo "message: ${message}"
   echo "use last commit: ${useLastCommit}"
   echo "is flagged: ${isFlagged}"
   echo '\n\n######################### end of debugging messages #########################\n\n'
+  return
 fi
 
 git add . -v
 if [ $useLastCommit == 'false' ]; then
   git commit -m "$message"
 fi
+
 if [[ $sameBranch == 'true' ]];
   then
-    if [[ $debugginMode == 'ON' ]]; then
-      echo "WARNING: Debugging mode disabpled 'git push' command"
-      return
-    else 
-      git push origin $remoteBranchName:$remoteBranchName
-    fi
+    git push origin $remoteBranchName:$remoteBranchName
   else
     git push origin `git branch | awk '{print $2}'`:$remoteBranchName
 fi
