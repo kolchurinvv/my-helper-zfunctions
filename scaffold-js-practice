@@ -8,7 +8,7 @@ print_usage(){
   echo '   -n   prevents Nodemon from launhing automatically'
 }
 
-while getopts ':hn' flag; do
+while getopts ':hnd' flag; do
   case "${flag}" in
     h)
       print_usage
@@ -16,6 +16,9 @@ while getopts ':hn' flag; do
     n)
       isFlagged='true'
       useNodemon='false';;
+    d)
+      isFlagged='true'
+      debuggingMode='ON';;
     # :)
     #   echo "$0:Must supply <dirName> <functionName> <variables>\n" >&2
     #   print_usage
@@ -35,6 +38,17 @@ dirName=${1}
 functionName=${2}
 variables=${3}
 
+
+if [[ $debuggingMode == 'ON' ]]; then
+  echo '\n\n######################### Debugging mode ON #########################\n\n'
+  echo "is flagged: ${isFlagged}"
+  echo "dirName is: \"${dirName}\" vs the \${1}: \"${1}\""
+  echo "functionName is: \"${functionName}\" vs the \${2}: \"${2}\""
+  echo "variables are: \"${variables}\" vs the \${3}: \"${3}\""
+  echo '\n\n######################### end of debugging messages #########################\n\n'
+  return
+fi
+
 if [[ ${#} -lt 3 ]]; then
   echo 'Must specify <dirName>, <functionName> and <variables>\n\n'
   print_usage
@@ -50,7 +64,7 @@ isUniqueName(){
       return 1
   fi
 }
-
+# TODO: #8 incorrect exit on existing dirName
 while true; do
   isUniqueName
   if [[ ${?} -ne 0 ]]; then
