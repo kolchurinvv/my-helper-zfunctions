@@ -8,6 +8,10 @@ print_usage(){
   echo '   -n   prevents Nodemon from launhing automatically'
 }
 
+dirName=
+functionName=
+variables=
+
 while getopts ':hnd' flag; do
   case "${flag}" in
     h)

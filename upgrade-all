@@ -5,6 +5,7 @@ upgrade-all(){
   echo "\n ## Anaconda is slithering... ## \n\n _/\__/\__0> \n\n"
   conda update --prefix /Users/vladimir/anaconda3 anaconda
   conda update --all
+  # TODO #9 utilize the NPM expansions repo
   echo "\n\n ## NPM stands for NEVER PANIC MUCH... ## \n\n"
 
   local -r current_node_version=$(nvm current)
