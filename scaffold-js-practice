@@ -11,6 +11,8 @@ print_usage(){
 dirName=
 functionName=
 variables=
+isFlagged='false'
+debuggingMode='OFF'
 
 while getopts ':hnd' flag; do
   case "${flag}" in
@@ -45,6 +47,7 @@ variables=${3}
 
 if [[ $debuggingMode == 'ON' ]]; then
   echo '\n\n######################### Debugging mode ON #########################\n\n'
+  echo "flags ${OPTARG}"
   echo "is flagged: ${isFlagged}"
   echo "dirName is: \"${dirName}\" vs the \${1}: \"${1}\""
   echo "functionName is: \"${functionName}\" vs the \${2}: \"${2}\""
@@ -121,4 +124,4 @@ if [[ $useNodemon == 'false' ]]; then
 fi
 # TODO: #2 find a way to push this into the integrated terminal in VScode
 nodemon -e "js, txt" -w
-return 0
+return

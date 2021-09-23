@@ -7,6 +7,8 @@ print_usage(){
 }
 # TODO #6 add the ability to just `git commit`, aka for the editor to open a commit dialog instad of using the `-m` flag
 
+isFlagged='false'
+
 while getopts ':h' flag; do
   case "${flag}" in
     h)
