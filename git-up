@@ -73,6 +73,7 @@ if [[ $debugginMode == 'ON' ]]; then
   echo '\n\n######################### Debugging mode ON #########################\n\n'
   echo "WARNING: Debugging mode disabpled 'git push' command\n"
   echo "local active branch name parsed as: $(git branch | awk '$0 ~ /\*/ { print $2}')"
+  echo "remoteBranchName is: ${remoteBranchName}"
   echo "message: ${message}"
   echo "use last commit: ${useLastCommit}"
   echo "is flagged: ${isFlagged}"
