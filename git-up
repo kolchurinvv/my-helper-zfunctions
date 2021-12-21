@@ -1,4 +1,4 @@
-print_usage(){
+print_usage() {
   echo 'Usage:  git-up [-flags] <remote-branch-name> "commit message"\n' 2>&1
   echo '  git-up - add all files, commit with a meassage and push the current branch to a <remote-branch-name>.'
   echo '  "commit message" - message assigned to the commit'
@@ -17,38 +17,43 @@ debugginMode='OFF'
 
 while getopts ':hpsd' flag; do
   case "${flag}" in
-    h)
-      print_usage
-      return 0;;
-    p)
-      isFlagged='true'
-      useLastCommit='true'
-      if [[ ${1} =~ 's' ]]; then
-        remoteBranchName=$(git branch | awk '$0 ~ /\*/ { print $2}')
-      else
-        remoteBranchName=${2}
-      fi;;
-    s)
-      isFlagged='true'
-      sameBranch='true'
+  h)
+    print_usage
+    return 0
+    ;;
+  p)
+    isFlagged='true'
+    useLastCommit='true'
+    if [[ ${1} =~ 's' ]]; then
       remoteBranchName=$(git branch | awk '$0 ~ /\*/ { print $2}')
+    else
+      remoteBranchName=${2}
+    fi
+    ;;
+  s)
+    isFlagged='true'
+    sameBranch='true'
+    remoteBranchName=$(git branch | awk '$0 ~ /\*/ { print $2}')
+    if [[ ${1} =~ 'p' ]]; then
+      useLastCommit='true'
+    else
       message=${2}
-      if [[ ${1} =~ 'p' ]];then
-        useLastCommit='true'
-      fi
-      if [ ${#} -lt 2 -a $useLastCommit == 'false' ];
-        then
-          echo "Error: $1 flag must have a 'commit message' or use with -p flag" >&2
-          message=
-          return 1
-      fi;;
-    d)
-      isFlagged='true'
-      debugginMode='ON';;
-    *)
-      printf "Invalid option: -${OPTARG}.\n\n" >&2
-      print_usage
-      return 1;;
+    fi
+    if [[ ${#} -lt 2 && $useLastCommit == 'false' ]]; then
+      echo "Error: $1 flag must have a 'commit message' or use with -p flag" >&2
+      message=
+      return 1
+    fi
+    ;;
+  d)
+    isFlagged='true'
+    debugginMode='ON'
+    ;;
+  *)
+    printf "Invalid option: -${OPTARG}.\n\n" >&2
+    print_usage
+    return 1
+    ;;
   esac
 done
 
@@ -56,19 +61,19 @@ if [[ $isFlagged == 'true' ]]; then
   shift
 fi
 
-if [ ${#} -lt 1 -a $isFlagged == 'false' ]; then
+if [[ ${#} -lt 1 && $isFlagged == 'false' ]]; then
   echo "Error: must specify flags/arguments.\n" >&2
   print_usage
   return 1
 fi
 
-if [ $isFlagged == 'false' -a  ${#} -lt 2 ]; then
+if [[ ${#} -lt 2 && $isFlagged == 'false' ]]; then
   echo 'Error: must provide <remote-branch-name> and "message".\n'
   print_usage
   return 1
 fi
 
-if [ $isFlagged == 'false' -a ${#} -eq 2 ]; then
+if [[ $isFlagged == 'false' && ${#} -eq 2 ]]; then
   remoteBranchName=${1}
   message=${2}
 fi
@@ -87,13 +92,12 @@ if [[ $debugginMode == 'ON' ]]; then
 fi
 
 git add . -v
-if [ $useLastCommit == 'false' ]; then
+if [[ $useLastCommit == 'false' ]]; then
   git commit -m "$message"
 fi
 
-if [[ $sameBranch == 'true' ]];
-  then
-    git push origin $remoteBranchName:$remoteBranchName
-  else
-    git push origin `git branch | awk '{print $2}'`:$remoteBranchName
+if [[ $sameBranch == 'true' ]]; then
+  git push origin $remoteBranchName:$remoteBranchName
+else
+  git push origin $(git branch | awk '{print $2}'):$remoteBranchName
 fi
