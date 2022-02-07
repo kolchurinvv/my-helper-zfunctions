@@ -1,0 +1,6 @@
+local -r current_node_version=$(nvm current)
+local -r next_node_version=$(nvm version-remote --lts)
+echo "curr node = $current_node_version; next node = $next_node_version; $current_node_version != $next_node_version"
+if [ "$current_node_version" != "$next_node_version" ]; then
+  echo "true"
+fi
