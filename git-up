@@ -60,7 +60,6 @@ done
 if [[ $isFlagged == 'true' ]]; then
   shift
 fi
-
 if [[ ${#} -lt 1 && $isFlagged == 'false' ]]; then
   echo "Error: must specify flags/arguments.\n" >&2
   print_usage
@@ -72,8 +71,9 @@ if [[ ${#} -lt 2 && $isFlagged == 'false' ]]; then
   print_usage
   return 1
 fi
-
 if [[ $isFlagged == 'false' && ${#} -eq 2 ]]; then
+  echo 'hi'
+  echo ${1}
   remoteBranchName=${1}
   message=${2}
 fi
