@@ -13,7 +13,8 @@ message=
 remoteBranchName=
 isFlagged='false'
 useLastCommit='false'
-debugginMode='OFF'
+debuggingMode='OFF'
+sameBranch='false'
 
 while getopts ':hpsd' flag; do
   case "${flag}" in
@@ -47,7 +48,7 @@ while getopts ':hpsd' flag; do
     ;;
   d)
     isFlagged='true'
-    debugginMode='ON'
+    debuggingMode='ON'
     ;;
   *)
     printf "Invalid option: -${OPTARG}.\n\n" >&2
@@ -57,6 +58,14 @@ while getopts ':hpsd' flag; do
   esac
 done
 
+# if [[ $debuggingMode == 'ON' ]]; then
+#   flags=${1}
+#   remoteBranchName=${2}
+#   echo "# params: ${#}"
+#   echo "{@} params: ${@}"
+#   echo "message: ${message}"
+#   # meassage=${3}
+# fi
 if [[ $isFlagged == 'true' ]]; then
   shift
 fi
@@ -71,16 +80,29 @@ if [[ ${#} -lt 2 && $isFlagged == 'false' ]]; then
   print_usage
   return 1
 fi
-if [[ $isFlagged == 'false' && ${#} -eq 2 ]]; then
-  echo 'hi'
-  echo ${1}
+# debugging if statement
+# if [[ $isFlagged == 'false' ]]; then
+#   echo "shifting params if already hasn't by the isFlagged check"
+#   shift
+# fi
+# echo "# params: ${#}"
+# echo "is flagged: ${isFlagged}"
+# if [[ ${#} -eq 2 ]]; then
+#   echo '2 params'
+# fi
+if [[ $isFlagged == 'false' && ${#} -ge 2 ]]; then
+  remoteBranchName=${1}
+  message=${2}
+fi
+if [[ $isFlagged == 'true' && $debuggingMode == 'ON' && ${#} -ge 2 ]]; then
   remoteBranchName=${1}
   message=${2}
 fi
 
-if [[ $debugginMode == 'ON' ]]; then
+if [[ $debuggingMode == 'ON' ]]; then
   echo '\n\n######################### Debugging mode ON #########################\n\n'
   echo "WARNING: Debugging mode disabpled 'git push' command\n"
+  echo "parsed flags: ${flags}"
   echo "local active branch name parsed as: $(git branch | awk '$0 ~ /\*/ { print $2}')"
   echo "use the same branch name: ${sameBranch}"
   echo "remoteBranchName is: ${remoteBranchName}"
