@@ -1,4 +1,4 @@
-print_usage(){
+print_usage() {
   echo "Usage:  scaffold-practice [-flags] <dirName> <functionName> <variables>\n" 2>&1
   echo '  <dirName> - required, specify the name of a new directory to be created (name of the problem) inside ~/Dev_Projects/Toptal_test_prep'
   echo '  <functionName> - required, specify the name of the function'
@@ -16,23 +16,27 @@ debuggingMode='OFF'
 
 while getopts ':hnd' flag; do
   case "${flag}" in
-    h)
-      print_usage
-      return 0;;
-    n)
-      isFlagged='true'
-      useNodemon='false';;
-    d)
-      isFlagged='true'
-      debuggingMode='ON';;
-    # :)
-    #   echo "$0:Must supply <dirName> <functionName> <variables>\n" >&2
-    #   print_usage
-    #   return 1;;
-    ?)
-      printf "Invalid option: -${OPTARG}.\n\n" >&2
-      print_usage
-      return 1;;
+  h)
+    print_usage
+    return 0
+    ;;
+  n)
+    isFlagged='true'
+    useNodemon='false'
+    ;;
+  d)
+    isFlagged='true'
+    debuggingMode='ON'
+    ;;
+  # :)
+  #   echo "$0:Must supply <dirName> <functionName> <variables>\n" >&2
+  #   print_usage
+  #   return 1;;
+  ?)
+    printf "Invalid option: -${OPTARG}.\n\n" >&2
+    print_usage
+    return 1
+    ;;
   esac
 done
 
@@ -43,7 +47,6 @@ fi
 dirName=${1}
 functionName=${2}
 variables=${3}
-
 
 if [[ $debuggingMode == 'ON' ]]; then
   echo '\n\n######################### Debugging mode ON #########################\n\n'
@@ -62,13 +65,12 @@ if [[ ${#} -lt 3 ]]; then
   return 1
 fi
 
-isUniqueName(){
-  DIRECTORYEXISTS=$(basename $(find ~/Dev_Projects/Toptal_test_prep -type d  -name ${dirName})) >/dev/null 2>&1
-  if [[ $DIRECTORYEXISTS = '' ]];
-    then
-      return 0
-    else
-      return 1
+isUniqueName() {
+  DIRECTORYEXISTS=$(basename $(find ~/Dev_Projects/Toptal_test_prep -type d -name ${dirName})) >/dev/null 2>&1
+  if [[ $DIRECTORYEXISTS = '' ]]; then
+    return 0
+  else
+    return 1
   fi
 }
 # TODO: #8 incorrect exit on existing dirName
@@ -77,7 +79,7 @@ while true; do
   if [[ ${?} -ne 0 ]]; then
     echo "Folder '${dirName}' already exists. Folder names must be unique."
     dirName= 
-    read  dirName'?Please enter new folder name: '
+    read dirName'?Please enter new folder name: '
     isUniqueName
     if [[ ${?} -eq 0 ]]; then
       break
@@ -91,11 +93,14 @@ mkdir ~/Dev_Projects/coding_practice/"$dirName"
 cd ~/Dev_Projects/coding_practice/"$dirName"
 echo 'line one
 line two
-line3 with more elements' >> input.txt
+line3 with more elements' >>input.txt
 echo '{
   "main": "index.js",
-  "type": "module"
-}' >> package.json
+  "type": "module",
+  "scripts": {
+    "watch": "nodemon -e js, txt -w"
+  }
+}' >>package.json
 echo 'import { readFileSync } from "fs";
 
 let input = readFileSync("input.txt", "utf8", (err, data) => {
@@ -116,8 +121,8 @@ function '$functionName'('$variables') {
 console.time("'$functionName'");
 console.log('$functionName'('$variables'));
 console.timeEnd("'$functionName'");
-' >> index.js
-npm install
+' >>index.js
+pnpm install
 code -g index.js:16:3 .
 if [[ $useNodemon == 'false' ]]; then
   return 0
