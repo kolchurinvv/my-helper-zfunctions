@@ -2,3 +2,4 @@
 .dccache
 *.log
 *local*
+testLoop
