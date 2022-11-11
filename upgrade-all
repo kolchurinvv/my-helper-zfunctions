@@ -14,20 +14,19 @@ if [ "$current_node_version" != "$next_node_version" ]; then
   local -r previous_node_version=$current_node_version
   nvm install --lts --latest-npm
   # npm install npm@latest -g
-
   nvm reinstall-packages "$previous_node_version"
-  nvm uninstall "$previous_node_version"
+  # nvm uninstall "$previous_node_version"
   nvm cache clear
 fi
 
 pnpm install pnpm@latest -g
 nvm alias default node
 pnpm update -g
-omz update
 echo 'update Zsh Theme: SpaceShip...'
 cd /Users/vladimir/.oh-my-zsh/custom/themes/spaceship-prompt
-git pull
+git pull --rebase
 cd ~
 bun upgrade
 sudo softwareupdate -iaR
+omz update
 omz reload
