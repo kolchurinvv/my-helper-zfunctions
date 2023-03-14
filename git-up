@@ -6,6 +6,7 @@ print_usage() {
   echo '    -h    prints out this message'
   echo '    -p    Previous. Uses the last commit; "commit message" argument is skipped'
   echo '    -s    Same (branches). Pushes changes to the branch with the same name as the current one. <remote-branch-name> ignored'
+  echo '    -u    push to upstream branch'
   echo '    -d    Debugging mode ON'
 }
 
@@ -15,8 +16,9 @@ isFlagged='false'
 useLastCommit='false'
 debuggingMode='OFF'
 sameBranch='false'
+upstreamBranch=$(git rev-parse --abbrev-ref --symbolic-full-name @{u} | sed 's#.*/##')
 
-while getopts ':hpsd' flag; do
+while getopts ':hpsud' flag; do
   case "${flag}" in
   h)
     print_usage
@@ -35,6 +37,21 @@ while getopts ':hpsd' flag; do
     isFlagged='true'
     sameBranch='true'
     remoteBranchName=$(git branch | awk '$0 ~ /\*/ { print $2}')
+    if [[ ${1} =~ 'p' ]]; then
+      useLastCommit='true'
+    else
+      message=${2}
+    fi
+    if [[ ${#} -lt 2 && $useLastCommit == 'false' ]]; then
+      echo "Error: $1 flag must have a 'commit message' or use with -p flag" >&2
+      message=
+      return 1
+    fi
+    ;;
+  u)
+    isFlagged='true'
+    sameBranch='false'
+    remoteBranchName=$upstreamBranch
     if [[ ${1} =~ 'p' ]]; then
       useLastCommit='true'
     else
