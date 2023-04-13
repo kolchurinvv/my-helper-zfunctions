@@ -1,0 +1,20 @@
+#!/bin/zsh
+# check if there's a .vscode folder and grab the preferred package manager from settings.json
+local packageManager=$(jq -r 'if has("npm.packageManager") then .["npm.packageManager"] else error("npm.packageManager field not found") end' .vscode/settings.json 2>/dev/null || jq -r '.["npm.packageManager"] // "pnpm"' ~/Library/Application\ Support/Code/User/settings.json)
+# capture input string
+local input=$1
+
+# if the package manager is not pnpm, yarn, or npm, then exit
+if [[ $packageManager != 'pnpm' && $packageManager != 'yarn' && $packageManager != 'npm' ]]; then
+  echo $packageManager
+  echo "Error: package manager not supported. Please use pnpm, yarn, or npm."
+  return 1
+fi
+# if the package manager is yarn, replace "install" or "i" with "add" inside the input string
+if [[ $packageManager == 'yarn' ]]; then
+  input=${input/ install / add }
+  input=${input/ i / add }
+fi
+
+# run the command
+$packageManager $input
