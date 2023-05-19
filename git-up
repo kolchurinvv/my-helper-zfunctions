@@ -16,7 +16,7 @@ isFlagged='false'
 useLastCommit='false'
 debuggingMode='OFF'
 sameBranch='false'
-upstreamBranch=$(git rev-parse --abbrev-ref --symbolic-full-name @{u} | sed 's/[^\/]*\///')
+upstreamBranch=$(git rev-parse --abbrev-ref --symbolic-full-name @{u} 2>git/dev/null | sed 's/[^\/]*\///')
 
 while getopts ':hpsud' flag; do
   case "${flag}" in
@@ -77,14 +77,14 @@ while getopts ':hpsud' flag; do
   esac
 done
 
-# if [[ $debuggingMode == 'ON' ]]; then
-#   flags=${1}
-#   remoteBranchName=${2}
-#   echo "# params: ${#}"
-#   echo "{@} params: ${@}"
-#   echo "message: ${message}"
-#   # meassage=${3}
-# fi
+if [[ $debuggingMode == 'ON' ]]; then
+  flags=${1}
+  remoteBranchName=${2}
+  echo "# params: ${#}"
+  echo "{@} params: ${@}"
+  echo "message: ${message}"
+  # meassage=${3}
+fi
 if [[ $isFlagged == 'true' ]]; then
   shift
 fi
@@ -138,7 +138,7 @@ if [[ $useLastCommit == 'false' ]]; then
 fi
 
 if [[ $sameBranch == 'true' ]]; then
-  git push origin $remoteBranchName:$remoteBranchName
+  git push -u origin $remoteBranchName:$remoteBranchName
 else
-  git push origin $(git branch | awk '{print $2}'):$remoteBranchName
+  git push -u origin $(git branch | awk '{print $2}'):$remoteBranchName
 fi
