@@ -137,7 +137,7 @@ if [[ $debuggingMode == 'ON' ]]; then
   echo "don't add all files flag: ${NoAddAllFiles}"
   if [[ $NoAddAllFiles == 'true' ]]; then
     echo -e "\tlisting staged files:"
-    git diff --name-only --cached | xargs -I{} echo -e "\t{}"
+    printf "\t\033[32m%s\033[0m\n" $(git diff --name-only --cached)
   fi
   echo "message: ${message}"
   echo "use last commit: ${useLastCommit}"
@@ -148,7 +148,7 @@ fi
 if [[ $NoAddAllFiles == 'true' ]]; then
   git add . -A -v
 else
-  git diff --name-only --cached | xargs echo
+  printf "\033[32m%s\033[0m\n" $(git diff --name-only --cached)
 fi
 
 if [[ $useLastCommit == 'false' ]]; then
