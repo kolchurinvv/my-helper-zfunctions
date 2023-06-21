@@ -16,9 +16,10 @@ isFlagged='false'
 useLastCommit='false'
 debuggingMode='OFF'
 sameBranch='false'
-upstreamBranch=$(git rev-parse --abbrev-ref --symbolic-full-name @{u} 2>git/dev/null | sed 's/[^\/]*\///')
+upstreamBranch=$(git rev-parse --abbrev-ref --symbolic-full-name @{u} 2>/dev/null | sed 's/[^\/]*\///')
+NoAddAllFiles='false'
 
-while getopts ':hpsud' flag; do
+while getopts ':hpsudA' flag; do
   case "${flag}" in
   h)
     print_usage
@@ -52,7 +53,11 @@ while getopts ':hpsud' flag; do
     ;;
   u)
     isFlagged='true'
-    sameBranch='false'
+    if [[ ${1} =~ 's' ]]; then
+      sameBranch='true'
+    else
+      sameBranch='false'
+    fi
     remoteBranchName=$upstreamBranch
     if [[ ${1} =~ 'p' ]]; then
       useLastCommit='true'
@@ -69,6 +74,9 @@ while getopts ':hpsud' flag; do
     isFlagged='true'
     debuggingMode='ON'
     ;;
+  A)
+    NoAddAllFiles='true'
+    ;;
   *)
     printf "Invalid option: -${OPTARG}.\n\n" >&2
     print_usage
@@ -79,7 +87,7 @@ done
 
 if [[ $debuggingMode == 'ON' ]]; then
   flags=${1}
-  remoteBranchName=${2}
+  # remoteBranchName=${2}
   echo "# params: ${#}"
   echo "{@} params: ${@}"
   echo "message: ${message}"
@@ -125,14 +133,24 @@ if [[ $debuggingMode == 'ON' ]]; then
   echo "local active branch name parsed as: $(git branch | awk '$0 ~ /\*/ { print $2}')"
   echo "use the same branch name: ${sameBranch}"
   echo "remoteBranchName is: ${remoteBranchName}"
+  echo "upstream branch name is: ${upstreamBranch}"
+  echo "don't add all files flag: ${NoAddAllFiles}"
+  if [[ $NoAddAllFiles == 'true' ]]; then
+    echo -e "\tlisting staged files:"
+    git diff --name-only --cached | xargs -I{} echo -e "\t{}"
+  fi
   echo "message: ${message}"
   echo "use last commit: ${useLastCommit}"
   echo "is flagged: ${isFlagged}"
   echo '\n\n######################### end of debugging messages #########################\n\n'
   return
 fi
+if [[ $NoAddAllFiles == 'true' ]]; then
+  git add . -A -v
+else
+  git diff --name-only --cached | xargs echo
+fi
 
-git add . -v
 if [[ $useLastCommit == 'false' ]]; then
   git commit -m "$message"
 fi
