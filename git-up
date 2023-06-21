@@ -136,7 +136,7 @@ if [[ $debuggingMode == 'ON' ]]; then
   echo "upstream branch name is: ${upstreamBranch}"
   echo "don't add all files flag: ${NoAddAllFiles}"
   if [[ $NoAddAllFiles == 'true' ]]; then
-    echo -e "\tlisting staged files:"
+    echo -e "\tListing staged files:"
     printf "\t\033[32m%s\033[0m\n" $(git diff --name-only --cached)
   fi
   echo "message: ${message}"
@@ -146,9 +146,10 @@ if [[ $debuggingMode == 'ON' ]]; then
   return
 fi
 if [[ $NoAddAllFiles == 'true' ]]; then
-  git add . -A -v
-else
+  echo 'Uploading files:'
   printf "\033[32m%s\033[0m\n" $(git diff --name-only --cached)
+else
+  git add . -A -v
 fi
 
 if [[ $useLastCommit == 'false' ]]; then
