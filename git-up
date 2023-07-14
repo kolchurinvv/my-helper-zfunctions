@@ -8,6 +8,7 @@ print_usage() {
   echo '    -s    Same (branches). Pushes changes to the branch with the same name as the current one. <remote-branch-name> ignored'
   echo '    -u    push to upstream branch'
   echo '    -d    Debugging mode ON'
+  echo "    -A    Commit only staged files, don't Add All files"
 }
 
 message=
