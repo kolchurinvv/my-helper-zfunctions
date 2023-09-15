@@ -4,6 +4,7 @@ brew upgrade --cask --greedy
 # echo "\n ## Anaconda is slithering... ## \n\n _/\__/\__0> \n\n"
 # conda update --prefix /Users/vladimir/anaconda3 anaconda
 # conda update --all
+brew uninstall --ignore-dependencies node
 # TODO #9 utilize the NPM expansions repo
 echo "\n\n ## NPM stands for NEVER PANIC MUCH... ## \n\n"
 
