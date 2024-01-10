@@ -6,14 +6,17 @@ print_usage(){
   echo '   -h   prints out this message'
 }
 # TODO #6 add the ability to just `git commit`, aka for the editor to open a commit dialog instad of using the `-m` flag
-
+# TODO ability to commint only already staged files
 isFlagged='false'
+onlyStaged='false'
 
-while getopts ':h' flag; do
+while getopts ':hs' flag; do
   case "${flag}" in
     h)
       print_usage
       return 0;;
+    s)
+	isFlagged = true
     ?)
       printf "Invalid option: -${OPTARG}.\n\n" >&2
       print_usage
@@ -25,11 +28,14 @@ if [[ $isFlagged == 'true' ]]; then
   shift
 fi
 
+if [[ $onyStaged == 'false' ]]; then
+git add . -v
+fi
+
 if [[ ${#} -lt 1 ]]; then
   echo 'Must have commit message\n\n'
   print_usage
   return 1
 fi
 
-git add . -v
 git commit -m "${1}"
