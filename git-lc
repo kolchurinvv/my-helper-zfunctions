@@ -38,10 +38,8 @@ if [[ $isFlagged == 'true' ]]; then
   shift
 fi
 
-  echo 'only staged should be false'
   echo "only staged is $onlyStaged"
-if [[ $onyStaged == 'false' ]]; then
-echo 'should run'
+if [[ $onlyStaged == 'false' ]]; then
   git add . -v
 fi
 

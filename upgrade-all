@@ -22,6 +22,7 @@ fi
 
 pnpm install pnpm@latest -g
 nvm alias default node
+npm i -g firebase-tools@latest
 pnpm update -g
 echo 'update Zsh Theme: SpaceShip...'
 cd /Users/vladimir/.oh-my-zsh/custom/themes/spaceship-prompt
