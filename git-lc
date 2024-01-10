@@ -14,14 +14,17 @@ while getopts ':hs' flag; do
   case "${flag}" in
     h)
       print_usage
-      return 0;;
+      return 0
+      ;;
     s)
       isFlagged = 'true'
-      onlyStaged = 'true';;
+      onlyStaged = 'true'
+      ;;
     ?)
       printf "Invalid option: -${OPTARG}.\n\n" >&2
       print_usage
-      return 1;;
+      return 1
+      ;;
   esac
 done
 
