@@ -9,8 +9,9 @@ print_usage(){
 # TODO ability to commint only already staged files
 isFlagged='false'
 onlyStaged='false'
+debug='false'
 
-while getopts ':hs' flag; do
+while getopts ':hsd' flag; do
   case "${flag}" in
     h)
       print_usage
@@ -19,6 +20,10 @@ while getopts ':hs' flag; do
     s)
       isFlagged='true'
       onlyStaged='true'
+      ;;
+    d)
+      isFlagged='true'
+      debug='true'
       ;;
     ?)
       printf "Invalid option: -${OPTARG}.\n\n" >&2
@@ -36,10 +41,25 @@ if [[ $onyStaged == 'false' ]]; then
   git add . -v
 fi
 
+
 if [[ ${#} -lt 1 ]]; then
   echo 'Must have commit message\n\n'
   print_usage
   return 1
+fi
+
+if [[ $debug == 'true' ]]; then
+  echo '\n\n######################### Debugging mode ON #########################\n\n'
+  echo "WARNING: Debugging mode disabpled 'git push' command\n"
+  echo "parsed flags: ${flags}"
+  if [[ $onlyStaged == 'true' ]]; then
+    echo -e "\tListing staged files:"
+    printf "\t\033[32m%s\033[0m\n" $(git diff --name-only --cached)
+  fi
+  echo "message: ${1}"
+  echo "is flagged: ${isFlagged}"
+  echo '\n\n######################### end of debugging messages #########################\n\n'
+  return
 fi
 
 git commit -m "${1}"
