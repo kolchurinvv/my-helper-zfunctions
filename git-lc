@@ -41,6 +41,7 @@ fi
   echo 'only staged should be false'
   echo "only staged is $onlyStaged"
 if [[ $onyStaged == 'false' ]]; then
+echo 'should run'
   git add . -v
 fi
 
