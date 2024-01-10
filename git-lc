@@ -17,8 +17,8 @@ while getopts ':hs' flag; do
       return 0
       ;;
     s)
-      isFlagged = 'true'
-      onlyStaged = 'true'
+      isFlagged='true'
+      onlyStaged='true'
       ;;
     ?)
       printf "Invalid option: -${OPTARG}.\n\n" >&2
