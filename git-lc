@@ -38,7 +38,6 @@ if [[ $isFlagged == 'true' ]]; then
   shift
 fi
 
-  echo "only staged is $onlyStaged"
 if [[ $onlyStaged == 'false' ]]; then
   git add . -v
 fi
