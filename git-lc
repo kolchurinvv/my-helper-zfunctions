@@ -1,3 +1,5 @@
+#!/bin/zsh
+
 print_usage(){
   echo 'Usage:  git-lc [-flags] "commit message"\n' 2>&1
   echo '  git-lc - add all files and commit locally with a meassage\n'
@@ -6,7 +8,6 @@ print_usage(){
   echo '   -h   prints out this message'
 }
 # TODO #6 add the ability to just `git commit`, aka for the editor to open a commit dialog instad of using the `-m` flag
-# TODO ability to commint only already staged files
 isFlagged='false'
 onlyStaged='false'
 debug='false'
@@ -38,12 +39,14 @@ if [[ $isFlagged == 'true' ]]; then
 fi
 
 if [[ $onyStaged == 'false' ]]; then
+  echo 'only staged should be false'
   git add . -v
 fi
 
 
 if [[ ${#} -lt 1 ]]; then
   echo 'Must have commit message\n\n'
+  echo "Recieved ${#}"
   print_usage
   return 1
 fi
