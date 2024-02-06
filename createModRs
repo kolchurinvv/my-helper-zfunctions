@@ -1,0 +1,10 @@
+#!/bin/zsh
+
+rm mod.rs 2>&-
+
+for file in *.rs; do
+    if [ "$file" != "mod.rs" ]; then
+        module_name=$(basename "$file" .rs)
+        echo "pub mod $module_name;" >> mod.rs
+    fi
+done
