@@ -1,5 +1,4 @@
 #!/bin/zsh
-
 rm mod.rs 2>&-
 
 for file in *.rs; do
@@ -8,3 +7,10 @@ for file in *.rs; do
         echo "pub mod $module_name;" >> mod.rs
     fi
 done
+
+if [[ $? === 0 ]]; then
+    echo "Success: created a mod.rs in $(pwd) with:"
+    echo "$(cat mod.rs)"
+else
+    echo "Failed to create mod.rs in $(pwd)!"
+fi
