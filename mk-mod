@@ -8,7 +8,7 @@ for file in *.rs; do
     fi
 done
 
-if [[ $? === 0 ]]; then
+if [[ $? == 0 ]]; then
     echo "Success: created a mod.rs in $(pwd) with:"
     echo "$(cat mod.rs)"
 else
