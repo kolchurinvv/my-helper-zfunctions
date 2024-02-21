@@ -6,6 +6,8 @@ print_usage(){
   echo '  "commit message" - required, the message assigned to the commit'
   echo '\n [-flags]:'
   echo '   -h   prints out this message'
+  echo '   -s   commit only staged files' 
+  echo '   -d   debug mode ON' 
 }
 # TODO #6 add the ability to just `git commit`, aka for the editor to open a commit dialog instad of using the `-m` flag
 isFlagged='false'
