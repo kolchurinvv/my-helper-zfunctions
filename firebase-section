@@ -1,10 +1,11 @@
   # ------------------------------------------------------------------------------
   # Configuration
   # ------------------------------------------------------------------------------
-  SPACESHIP_FIREBASE_SHOW="${SPACESHIP_FIREBASE_SHOW=true}"
-  SPACESHIP_FIREBASE_PREFIX="${SPACESHIP_FIREBASE_PREFIX="FB project: "}"
-  SPACESHIP_FIREBASE_SYMBOL="${SPACESHIP_FIREBASE_SYMBOL="🔥 "}"
-  SPACESHIP_FIREBASE_COLOR="${SPACESHIP_FIREBASE_COLOR="#d75f00"}"
+  # SPACESHIP_FIREBASE_SHOW="${SPACESHIP_FIREBASE_SHOW=true}"
+  # SPACESHIP_FIREBASE_PREFIX="${SPACESHIP_FIREBASE_PREFIX="FB project: "}"
+  # SPACESHIP_FIREBASE_SYMBOL="${SPACESHIP_FIREBASE_SYMBOL="🔥"}"
+SPACESHIP_FIREBASE_SYMBOL="🔥"
+  # SPACESHIP_FIREBASE_COLOR="${SPACESHIP_FIREBASE_COLOR="#d75f00"}"
 
   # ------------------------------------------------------------------------------
   # Section
@@ -12,13 +13,12 @@
 
   # Shows active Firebase Project
   firebase_section() {
-  # wheather to show this section
-  # echo 'firebase section loaded'
-  #  [[ $SPACESHIP_FIREBASE_SHOW == false ]] && return
   
   # check if firebase-tools cli is installed
-  #  spaceship::exists firebase || return todo: create a function that checks if the cli exists
-  
+  local firebase_cli=$(which firebase)
+  if [ ! -f "$firebase_cli" ]; then
+  	return
+  fi
   # firebase-cli creates this config file with all the settings
   local file=~/.config/configstore/firebase-tools.json
   if [ ! -f "$file" ]; then
@@ -43,11 +43,6 @@
   if [ "$current_project" != "null" ]; then
   # remove the quotations
   current_project=$(echo $current_project | awk '{gsub(/[\"]/, "", $1)} {print $1" "}')
-  # spaceship::section \
-  #  --color "$SPACESHIP_FIREBASE_COLOR" \
-  #  --prefix "$SPACESHIP_FIREBASE_PREFIX" \
-  # "${SPACESHIP_FIREBASE_SYMBOL}${current_project}"
-  # echo -e "\e[38;2;215;95;0m$SPACESHIP_FIREBASE_SYMBOL$current_project\e[0m"
-  echo "$SPACESHIP_FIREBASE_SYMBOL$current_project"
+   echo "$SPACESHIP_FIREBASE_SYMBOL$current_project"
   fi
    }
