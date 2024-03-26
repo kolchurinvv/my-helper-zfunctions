@@ -1,0 +1,7 @@
+#!/bin/zsh
+
+local versions=( $(nvm ls | grep -v 'v20.12.0\|v18.20.0' | grep -Eo 'v[0-9]+\.[0-9]+\.[0-9]+' | xargs) )
+for version in "${versions[@]}"; do
+  nvm uninstall $version
+done
+
