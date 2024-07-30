@@ -1,0 +1,14 @@
+#!/bin/zsh
+wg-quick down /Users/vladimir/.ssh/liminor-m1-air.conf
+
+# Get the list of network services into an array
+services=()
+while read -r service; do
+  services+=("$service")
+done < <(networksetup -listallnetworkservices | tail +2)
+
+# Loop through each service and reset DNS servers
+for service in "${services[@]}"; do
+  echo "Resetting DNS servers for $service..."
+  sudo networksetup -setdnsservers $service empty
+done
