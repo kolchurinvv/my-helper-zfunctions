@@ -20,8 +20,6 @@ fi
 
 pnpm install pnpm@latest -g
 nvm alias default node
-npm i -g firebase-tools@latest
-npm i -g firebase-functions@latest
 pnpm update -g
 npm i -g npm@latest
 # echo 'update Zsh Theme: SpaceShip...'
