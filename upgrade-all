@@ -26,7 +26,7 @@ npm i -g npm@latest
 # cd /Users/vladimir/.oh-my-zsh/custom/themes/spaceship-prompt
 # git pull --rebase
 # cd ~
-bun upgrade
+bun upgrade --stable
 sudo softwareupdate -iaR
 omz update
 omz reload
