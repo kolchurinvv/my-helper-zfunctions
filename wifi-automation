@@ -5,13 +5,21 @@ DOCK_SERVICE="DL-Dock"
 # look up if dock provided ip address
 IP_ADDR=$(/usr/sbin/networksetup -getinfo "$DOCK_SERVICE" | grep "IP address" | awk '{print $NF}')
 
-echo "ip addr found is: $IP_ADDR"
+POWER_STATE=$(networksetup -getairportpower en0 | awk '{print $NF}')
 
 # Check if the network service is connected
 if [[ $IP_ADDR != 'none' ]]; then
     # If connected, disable Wi-Fi
-    networksetup -setairportpower en0 off
+    if [[ $POWER_STATE == 'On' ]]; then
+        networksetup -setairportpower en0 off
+    else
+        return
+    fi
 else
     # If not connected, enable Wi-Fi
-    networksetup -setairportpower en0 on
+    if [[ $POWER_STATE == 'On' ]]; then
+        return
+    else
+        networksetup -setairportpower en0 on
+    fi
 fi
