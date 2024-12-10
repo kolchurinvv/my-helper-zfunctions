@@ -1,3 +1,7 @@
+#!/bin/zsh
+
+#TODO: refactor the functionality to default to the same branch and accept -n flag when it requires a different remote branch name
+#TODO: refactor parsing of the flags
 print_usage() {
   echo 'Usage:  git-up [-flags] <remote-branch-name> "commit message"\n' 2>&1
   echo '  git-up - add all files, commit with a meassage and push the current branch to a <remote-branch-name>.'

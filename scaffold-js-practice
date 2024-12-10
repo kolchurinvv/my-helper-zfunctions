@@ -1,3 +1,5 @@
+#!/bin/zsh
+
 print_usage() {
   echo "Usage:  scaffold-practice [-flags] <dirName> <functionName> <variables>\n" 2>&1
   echo '  <dirName> - required, specify the name of a new directory to be created (name of the problem) inside ~/Dev_Projects/Toptal_test_prep'
