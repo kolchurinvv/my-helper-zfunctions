@@ -1,0 +1,31 @@
+#!/bin/zsh
+
+# Source the function to check nvim status
+source "./is_nvim_running_in_current_tmux_session"
+
+# Main logic to run the nvim session
+NVIM_PID=$(is_nvim_running_in_current_tmux_session)  # Call the function directly
+
+if [[ $? -eq 0 && -n "$NVIM_PID" ]]; then  # Successful call and NVIM_PID is not empty
+
+    # Use the found nvim PID to get the current working directory
+    NVIM_DIR=$(lsof -p "$NVIM_PID" | grep cwd | awk '{print $9}')
+
+    # Check if NVIM_DIR was found and is not empty
+    if [[ -d "$NVIM_DIR" ]]; then
+        cd "$NVIM_DIR" || exit 1
+        echo "Changed directory to Neovim working directory: $NVIM_DIR"
+    else
+        echo "Neovim running, but its working directory could not be determined."
+        exit 1
+    fi
+
+    echo "nvim is already running; Launching nvim ."
+    nvim .
+# else
+#     echo "No Neovim instance running in the current session, launching new one..."
+#     nvim . || { echo "Neovim failed to start. Press any key to exit."; read -n 1; }
+fi
+
+# Prevent tmux from exiting on Neovim quit
+exec zsh

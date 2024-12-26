@@ -1,0 +1,43 @@
+#!/bin/zsh
+
+is_nvim_running_in_current_tmux_session() {
+    # echo 'Starting session check...'
+    local TMUX_SESSION_NAME=$(tmux display-message -p '#S')
+    # echo "Current tmux session name: $TMUX_SESSION_NAME"
+
+    # Get the list of all running nvim PIDs
+    local NVM_PIDS=($(pgrep -f "nvim"))
+
+    if [[ ${#NVM_PIDS[@]} -eq 0 ]]; then
+        echo 'No Neovim instances found at all.'
+        return 1  # No nvim processes found
+    fi
+
+    # echo "Neovim PIDs found: ${NVM_PIDS[*]}"
+
+    # Iterate over each PID of nvim processes
+    for PID in "${NVM_PIDS[@]}"; do
+        # echo "Checking PID: $PID"
+
+        # Ensure valid PID
+        if ps -p "$PID" > /dev/null 2>&1; then
+            # TODO: sesion id is not the tmux session, but user login shell session; therefore in a new tmux session this code never works as expected
+            local SESSION_ID=$(ps -o sess= -p "$PID" |  sed 's/^[^[:alnum:]]*//; s/[^[:alnum:]]*$//')  # Get the session ID
+            local TMUX_SESSION_ID=$(tmux display-message -p '#{session_id}'|  sed 's/^[^[:alnum:]]*//; s/[^[:alnum:]]*$//')  # Get current tmux session ID
+
+            # echo "Valid PID: $PID with Session ID = $SESSION_ID, TMUX Session ID: $TMUX_SESSION_ID"
+
+            # Check if this process belongs to the current tmux session
+            if [[ "$SESSION_ID" == "$TMUX_SESSION_ID" ]]; then
+                echo "$PID"  # Return the PID if it matches
+                return 0  # nvim found in current session
+            fi
+        # else
+        #     echo "Invalid PID: $PID."
+        fi
+    done
+
+    # echo "No Neovim found in the current session."
+    return 1  # No nvim found in the current session
+}
+
