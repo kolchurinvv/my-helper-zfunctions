@@ -1,174 +1,89 @@
 #!/bin/zsh
 
-#TODO: refactor the functionality to default to the same branch and accept -n flag when it requires a different remote branch name
-#TODO: refactor parsing of the flags
 print_usage() {
-  echo 'Usage:  git-up [-flags] <remote-branch-name> "commit message"\n' 2>&1
-  echo '  git-up - add all files, commit with a meassage and push the current branch to a <remote-branch-name>.'
+  echo 'Usage:  gu [-flags] <remote-branch-name> "commit message"'
+  echo '  [g]it-[u]p - add all files, commit with a message and push the current branch to a <remote-branch-name>.'
   echo '  "commit message" - message assigned to the commit'
   echo '\n [-flags]:'
-  echo '    -h    prints out this message'
-  echo '    -p    Previous. Uses the last commit; "commit message" argument is skipped'
-  echo '    -s    Same (branches). Pushes changes to the branch with the same name as the current one. <remote-branch-name> ignored'
-  echo '    -u    push to upstream branch'
+  echo '    -h    Prints out this message'
+  echo '    -p    Uses [p]revious commit message; "commit message" argument is skipped'
+  echo '    -n <branch> Specify a different <remote-branch-name>. Defaults to the same branch if not provided.'
   echo '    -d    Debugging mode ON'
   echo "    -A    Commit only staged files, don't Add All files"
 }
 
+get_current_branch() {
+  git branch --show-current
+}
+
+get_upstream_branch() {
+  git rev-parse --abbrev-ref --symbolic-full-name @{u} 2>/dev/null | sed 's/[^\/]*\///'
+}
+
 message=
 remoteBranchName=
-isFlagged='false'
 useLastCommit='false'
 debuggingMode='OFF'
-sameBranch='false'
-upstreamBranch=$(git rev-parse --abbrev-ref --symbolic-full-name @{u} 2>/dev/null | sed 's/[^\/]*\///')
 NoAddAllFiles='false'
+flags=''
 
-while getopts ':hpsudA' flag; do
+while getopts ':hpndA:' flag; do
   case "${flag}" in
-  h)
-    print_usage
-    return 0
-    ;;
-  p)
-    isFlagged='true'
-    useLastCommit='true'
-    if [[ ${1} =~ 's' ]]; then
-      remoteBranchName=$(git branch | awk '$0 ~ /\*/ { print $2}')
-    elif [[ ${1} =~ 'u' ]]; then
-      remoteBranchName=$upstreamBranch
-    else
-      remoteBranchName=${2}
-    fi
-    ;;
-  s)
-    isFlagged='true'
-    sameBranch='true'
-    remoteBranchName=$(git branch | awk '$0 ~ /\*/ { print $2}')
-    if [[ ${1} =~ 'p' ]]; then
-      useLastCommit='true'
-    else
-      message=${2}
-    fi
-    if [[ ${#} -lt 2 && $useLastCommit == 'false' ]]; then
-      echo "Error: $1 flag must have a 'commit message' or use with -p flag" >&2
-      message=
-      return 1
-    fi
-    ;;
-  u)
-    isFlagged='true'
-    if [[ ${1} =~ 's' ]]; then
-      sameBranch='true'
-      remoteBranchName=$(git branch | awk '$0 ~ /\*/ { print $2}')
-      upstremBranchName=$(git branch | awk '$0 ~ /\*/ { print $2}')
-    else
-      sameBranch='false'
-    fi
-    if [[ $upstreamBranch != '' ]]; then
-	remoteBranchName=$upstreamBranch
-    else
-    	remoteBranchName=$(git branch | awk '$0 ~ /\*/ { print $2}')
-    fi
-    if [[ ${1} =~ 'p' ]]; then
-      useLastCommit='true'
-    else
-      message=${2}
-    fi
-    if [[ ${#} -lt 2 && $useLastCommit == 'false' ]]; then
-      echo "Error: $1 flag must have a 'commit message' or use with -p flag" >&2
-      message=
-      return 1
-    fi
-    ;;
-  d)
-    isFlagged='true'
-    debuggingMode='ON'
-    ;;
-  A)
-    NoAddAllFiles='true'
-    ;;
-  *)
-    printf "Invalid option: -${OPTARG}.\n\n" >&2
-    print_usage
-    return 1
-    ;;
+    h) print_usage; return 0 ;;
+    p) useLastCommit='true' ;;
+    n) remoteBranchName="${OPTARG}" ;;  # Capture the argument for -n
+    d) debuggingMode='ON' ;;
+    A) NoAddAllFiles='true' ;;
+    *) printf "Invalid option: -${OPTARG}.\n\n" >&2; print_usage; return 1 ;;
   esac
+  flags+="${flag} "  # Capture the flags for debugging
 done
 
-if [[ $debuggingMode == 'ON' ]]; then
-  flags=${1}
-  # remoteBranchName=${2}
-  echo "# params: ${#}"
-  echo "{@} params: ${@}"
-  echo "message: ${message}"
-  # meassage=${3}
+shift $((OPTIND - 1))
+
+# Default to current branch if no remote branch name is specified
+if [[ -z $remoteBranchName ]]; then
+  remoteBranchName=$(get_current_branch)
 fi
-if [[ $isFlagged == 'true' ]]; then
-  shift
-fi
-if [[ ${#} -lt 1 && $isFlagged == 'false' ]]; then
-  echo "Error: must specify flags/arguments.\n" >&2
+
+# Check for commit message
+if [[ $useLastCommit == 'false' && -z $1 ]]; then
+  echo "Error: must provide a commit message unless using -p flag." >&2
   print_usage
   return 1
 fi
 
-if [[ ${#} -lt 2 && $isFlagged == 'false' ]]; then
-  echo 'Error: must provide <remote-branch-name> and "message".\n'
-  print_usage
-  return 1
-fi
-# debugging if statement
-# if [[ $isFlagged == 'false' ]]; then
-#   echo "shifting params if already hasn't by the isFlagged check"
-#   shift
-# fi
-# echo "# params: ${#}"
-# echo "is flagged: ${isFlagged}"
-# if [[ ${#} -eq 2 ]]; then
-#   echo '2 params'
-# fi
-if [[ $isFlagged == 'false' && ${#} -ge 2 ]]; then
-  remoteBranchName=${1}
-  message=${2}
-fi
-if [[ $isFlagged == 'true' && $debuggingMode == 'ON' && ${#} -ge 2 ]]; then
-  remoteBranchName=${1}
-  message=${2}
+# Assign commit message if provided
+if [[ $useLastCommit == 'false' ]]; then
+  message=$1
 fi
 
-if [[ $debuggingMode == 'ON' ]]; then
-  echo '\n\n######################### Debugging mode ON #########################\n\n'
-  echo "WARNING: Debugging mode disabpled 'git push' command\n"
-  echo "parsed flags: ${flags}"
-  echo "local active branch name parsed as: $(git branch | awk '$0 ~ /\*/ { print $2}')"
-  echo "use the same branch name: ${sameBranch}"
-  echo "remoteBranchName is: ${remoteBranchName}"
-  echo "upstream branch name is: ${upstreamBranch}"
-  echo "don't add all files flag: ${NoAddAllFiles}"
-  if [[ $NoAddAllFiles == 'true' ]]; then
-    echo -e "\tListing staged files:"
-    printf "\t\033[32m%s\033[0m\n" $(git diff --name-only --cached)
-  fi
-  echo "message: ${message}"
-  echo "use last commit: ${useLastCommit}"
-  echo "is flagged: ${isFlagged}"
-  echo '\n\n######################### end of debugging messages #########################\n\n'
-  return
-fi
+# Handle file adding
 if [[ $NoAddAllFiles == 'true' ]]; then
   echo 'Uploading files:'
-  printf "\033[32m%s\033[0m\n" $(git diff --name-only --cached)
+  printf "\033[32m%s\033[0m\n" "$(git diff --name-only --cached)"
 else
   git add . -A -v
 fi
 
+# Commit if not using the last commit
 if [[ $useLastCommit == 'false' ]]; then
   git commit -m "$message"
 fi
 
-if [[ $sameBranch == 'true' ]]; then
-  git push -u origin $remoteBranchName:$remoteBranchName
-else
-  git push -u origin $(git branch | awk '{print $2}'):$remoteBranchName
+# Debugging output
+if [[ $debuggingMode == 'ON' ]]; then
+  echo '\n\n######################### Debugging mode ON #########################\n\n'
+  echo "WARNING: Debugging mode disables 'git push' command"
+  echo "Parsed flags: ${flags}"
+  echo "Local active branch name parsed as: $(get_current_branch)"
+  echo "Remote branch name is: ${remoteBranchName}"
+  echo "Don't add all files flag: ${NoAddAllFiles}"
+  echo "Message: ${message}"
+  echo "Use last commit: ${useLastCommit}"
+  echo '\n\n######################### end of debugging messages #########################\n\n'
+  return
 fi
+
+# Push to the specified remote branch
+git push -u origin "$remoteBranchName"
